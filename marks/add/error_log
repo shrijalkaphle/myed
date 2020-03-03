@@ -1,0 +1,29 @@
+[31-Jan-2020 13:36:44 UTC] PHP Warning:  mysqli_connect(): (28000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/dbconnect.php on line 9
+[31-Jan-2020 13:36:44 UTC] PHP Notice:  Undefined index: id in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 3
+[31-Jan-2020 13:36:44 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 9
+[31-Jan-2020 13:36:44 UTC] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, null given in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 11
+[31-Jan-2020 13:37:46 UTC] PHP Warning:  mysqli_connect(): (28000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/dbconnect.php on line 9
+[31-Jan-2020 13:37:46 UTC] PHP Notice:  Undefined index: id in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 3
+[31-Jan-2020 13:37:46 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 9
+[31-Jan-2020 13:37:46 UTC] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, null given in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 11
+[31-Jan-2020 13:38:26 UTC] PHP Warning:  mysqli_connect(): (28000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/dbconnect.php on line 9
+[31-Jan-2020 13:38:26 UTC] PHP Notice:  Undefined index: id in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 3
+[31-Jan-2020 13:38:26 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 9
+[31-Jan-2020 13:38:26 UTC] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, null given in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 11
+[31-Jan-2020 13:39:00 UTC] PHP Warning:  mysqli_connect(): (28000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/dbconnect.php on line 9
+[31-Jan-2020 13:39:00 UTC] PHP Notice:  Undefined index: id in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 3
+[31-Jan-2020 13:39:00 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 9
+[31-Jan-2020 13:39:00 UTC] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, null given in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 11
+[31-Jan-2020 13:39:05 UTC] PHP Warning:  mysqli_connect(): (28000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/dbconnect.php on line 9
+[31-Jan-2020 13:39:05 UTC] PHP Notice:  Undefined index: id in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 3
+[31-Jan-2020 13:39:05 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 9
+[31-Jan-2020 13:39:05 UTC] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, null given in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 11
+[31-Jan-2020 13:48:25 UTC] PHP Warning:  mysqli_connect(): (28000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/dbconnect.php on line 9
+[31-Jan-2020 13:48:25 UTC] PHP Notice:  Undefined index: id in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 3
+[31-Jan-2020 13:48:25 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 9
+[31-Jan-2020 13:48:25 UTC] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, null given in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 11
+[31-Jan-2020 19:48:58 UTC] PHP Notice:  Undefined index: id in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 3
+[31-Jan-2020 20:08:59 UTC] PHP Notice:  Undefined index: id in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 3
+[31-Jan-2020 20:09:41 UTC] PHP Notice:  Undefined index: id in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 3
+[19-Feb-2020 07:55:43 UTC] PHP Notice:  Undefined index: id in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 4
+[19-Feb-2020 07:55:43 UTC] PHP Notice:  Undefined index: id in /home/nc9urtqf96xv/public_html/ai-interf.com/myed/marks/add/index.php on line 8
