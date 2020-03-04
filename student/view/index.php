@@ -322,7 +322,7 @@
                         <br>
                         <div class="row bodyFont">
                             <div class="col-md-6">
-                                <div class="card"  style="height: 310px">
+                                <div class="card">
                                     <div class="card-body">
                                         <h3 class="text-center">Personal Information</h3>
                                         <hr>
@@ -369,8 +369,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="card" style="height: 310px">
+                            
+                            <div class="col-md-6 mobView">
+                                <div class="card">
                                     <div class="card-body">
                                         <h3 class="text-center">Guardian Information</h3>
                                         <hr>
@@ -563,8 +564,11 @@
 <style>
     @media screen and (max-width: 992px) {
         .chart {
-            width:350px !important;
+            width: auto !important;
             height: auto !important;
+        }
+        .mobView {
+            padding-top: 20px;
         }
     }
     
