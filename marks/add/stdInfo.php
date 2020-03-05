@@ -1,15 +1,15 @@
 <?php
-include '../../dbconnect.php';
+    include '../../dbconnect.php';
 
-$addno = $_GET['addno'];
-// $addno = 'b22';
-$query = "SELECT * FROM student WHERE addnum = '$addno'";
-$result = mysqli_query($conn, $query);
+    $addno = $_GET['addno'];
+    // $addno = 'b22';
+    $query = "SELECT * FROM student WHERE addnum = '$addno'";
+    $result = mysqli_query($conn, $query);
 
-$num = mysqli_num_rows($result);
+    $num = mysqli_num_rows($result);
 
-if ($num != 0) {
-    $data = mysqli_fetch_assoc($result);
+    if ($num != 0) {
+        $data = mysqli_fetch_assoc($result);
 ?>
     <br>
     <div style="border: 0px solid black; width:500px;display: inline-block"><label class="">Name : <?php echo $data['name'] ?></label></div><br>

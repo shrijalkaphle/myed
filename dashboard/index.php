@@ -4,8 +4,54 @@
     if(!$_SESSION['id']) {
         header('location: ../home');
     }
-    
+    //gender define
+    $male = 0;
+    $female = 0;
+
+    //pass and failed
+    $pass = 0;
+    $failed = 0;
+
+    //talent graph
+    $academic = 0;
+    $sport = 0;
+    $arts = 0;
+    $music = 0;
+    $other = 0;
+
+    //health status
+    $query = "SELECT * FROM healthstatus WHERE isSick = 1";
+    $result = mysqli_query($conn,$query);
+    $unhealthy = mysqli_num_rows($result);
+
+    $query = "SELECT * FROM healthstatus WHERE isSick = '0' AND status = '1'";
+    $result = mysqli_query($conn,$query);
+    $recovered = mysqli_num_rows($result);
+
     $id = $_SESSION['id'];
+    
+    $query = "SELECT * FROM student";
+    $result = mysqli_query($conn,$query);
+
+    while($row = mysqli_fetch_assoc($result)) {
+        //for number of male and female
+        if(strtolower($row['gender']) == 'male') {
+            $male++;
+        } else if(strtolower($row['gender']) == 'female') {
+            $female++;
+        }
+        if(strtolower($row['talent']) == 'academics') {
+            $academic++;
+        } else if(strtolower($row['talent']) == 'music') {
+            $music++;
+        } else if (strtolower($row['talent']) == 'sports') {
+            $sport++;
+        }else if (strtolower($row['talent']) == 'arts') {
+            $art++;
+        }else {
+            $other++;
+        }
+    }
     
     $sql = "SELECT * FROM user WHERE id = '$id'";
     $result = mysqli_query($conn,$sql);
@@ -24,7 +70,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="description" content="This is an example dashboard created using build-in elements and components.">
     <meta name="msapplication-tap-highlight" content="no">
-    <script src="jquery-3.4.1.min.js"></script>
+    <script src="../js/jquery-3.4.1.min.js"></script>
     <link href="../css/dashboard.css" rel="stylesheet">
 </head>
 <body>
@@ -236,6 +282,7 @@
                                                     $sql = "SELECT * FROM student";
                                                     $result = mysqli_query($conn,$sql);
                                                     $stdCount = mysqli_num_rows($result);
+                                                    $healthy = $stdCount - ($unhealthy + $recovered);
                                                     echo $stdCount;
                                                 ?>
                                             </span></div>
@@ -247,11 +294,18 @@
                                 <div class="card mb-3 widget-content bg-arielle-smile">
                                     <div class="widget-content-wrapper text-white">
                                         <div class="widget-content-left">
-                                            <div class="widget-heading">Teachers<sup>(Coming soon)</sup></div>
+                                            <div class="widget-heading">Courses</div>
                                             <div class="widget-subheading"></div>
                                         </div>
                                         <div class="widget-content-right">
-                                            <div class="widget-numbers text-white"><span>NaN</span></div>
+                                            <div class="widget-numbers text-white"><span>
+                                                <?php
+                                                    $sql = "SELECT * FROM course";
+                                                    $result = mysqli_query($conn,$sql);
+                                                    $courseCount = mysqli_num_rows($result);
+                                                    echo $courseCount;
+                                                ?> 
+                                            </span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -272,6 +326,37 @@
                         </div>
                         <hr>
                         <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <canvas id="gender"></canvas>
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="col-md-6 second">
+                               <div class="card">
+                                    <canvas id="health"></canvas>
+                                    <br>
+                               </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <canvas id="marks"></canvas>
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="col-md-6 second">
+                                <div class="card">
+                                    <canvas id="talent"></canvas>
+                                    <br>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <br><br>
                         <div class="main-card mb-3 card">
                             <div class="card-header">
                                 Recent Updates
@@ -334,3 +419,149 @@
     <script type="text/javascript" src="../assets/scripts/main.js"></script>
 </body>
 </html>
+
+<style>
+    @media screen and (max-width: 992px) {
+        
+        .second {
+            padding-top: 20px ;
+        }
+    }
+</style>
+
+<script>
+    var canvas1 = document.getElementById("gender");
+    var ctx1 = canvas1.getContext('2d');
+
+    var canvas2 = document.getElementById("marks");
+    var ctx2 = canvas2.getContext('2d');
+
+    var canvas3 = document.getElementById("health");
+    var ctx3 = canvas3.getContext('2d');
+
+    var canvas4 = document.getElementById("talent");
+    var ctx4 = canvas4.getContext('2d');
+
+    // Global Options:
+    Chart.defaults.global.defaultFontColor = 'black';
+    Chart.defaults.global.defaultFontSize = 16;
+
+    // chart data for gender chart
+    var data1 = {
+        labels: ["Male", "Female"],
+        datasets: [
+            {
+                fill: true,
+                backgroundColor: ['#FF6384','#36A2EB'],
+                data: [ <?php echo $male; ?> , <?php echo $female; ?> ],
+                borderColor:	['#FF6384', '#36A2EB'],
+                borderWidth: [2,2]
+            }
+        ]
+    };
+    var options1 = {
+            title: {
+                    display: true,
+                    text: 'Gender',
+                    position: 'top'
+                },
+            rotation: -0.7 * Math.PI
+    };
+
+    // chart data for pass and failed chart
+    var data2 = {
+        labels: ["Failed", "Pass"],
+        datasets: [
+            {
+                fill: true,
+                backgroundColor: ['#FF6384','#36A2EB'],
+                data: [ <?php echo $male; ?> , <?php echo $female; ?>],
+                borderColor:	['#FF6384', '#36A2EB'],
+                borderWidth: [2,2]
+            }
+        ]
+    };
+    var options2 = {
+            title: {
+                    display: true,
+                    text: 'Pass Fail',
+                    position: 'top'
+                },
+            rotation: -0.7 * Math.PI
+    };
+
+    // chart data for pass failed chart
+    var data3 = {
+        labels: ["Healthy","Unhealthy","Recovered"],
+        datasets: [
+            {
+                fill: true,
+                backgroundColor: ['#36A2EB','#FF6384','#FFCD56'],
+                data: [ <?php echo $healthy; ?> , <?php echo $unhealthy; ?>,<?php echo $recovered; ?>],
+                borderColor:	['#36A2EB', '#FF6384','#FFCD56'],
+                borderWidth: [2,2]
+            }
+        ]
+    };
+
+    var options3 = {
+            title: {
+                    display: true,
+                    text: 'Health Status',
+                    position: 'top'
+                },
+            rotation: -0.7 * Math.PI
+    };
+
+    // chart data for talent chart
+    var data4 = {
+        labels: ["Academics","Sports","Arts","Music","Others"],
+        datasets: [
+            {
+                fill: true,
+                backgroundColor: ['#36A2EB','#FF6384','#FFCD56','#FF9124','#4BC0C0'],
+                data: [
+                    <?php echo $academic ?>,
+                    <?php echo $sport ?>,
+                    <?php echo $arts ?>,
+                    <?php echo $music ?>,
+                    <?php echo $other ?>
+                ],
+                borderColor:	['#36A2EB', '#FF6384','#FFCD56','#FF9124','#4BC0C0'],
+                borderWidth: [2,2]
+            }
+        ]
+    };
+
+    var options4 = {
+            title: {
+                    display: true,
+                    text: 'Talent',
+                    position: 'top'
+                },
+            rotation: -0.7 * Math.PI
+    };
+
+
+    // Chart declaration:
+    var myBarChart = new Chart(ctx1, {
+        type: 'pie',
+        data: data1,
+        options: options1
+    });
+    var myBarChart = new Chart(ctx2, {
+        type: 'pie',
+        data: data2,
+        options: options2
+    });
+    var myBarChart = new Chart(ctx3, {
+        type: 'pie',
+        data: data3,
+        options: options3
+    });
+    var myBarChart = new Chart(ctx4, {
+        type: 'pie',
+        data: data4,
+        options: options4
+    });
+</script>

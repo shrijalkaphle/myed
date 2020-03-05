@@ -34,6 +34,8 @@
         $grade = $_POST['grade'];
         $doj = $_POST['doj'];
         $nationality = $_POST['nationality'];
+        $talent = $_POST['talent'];
+        $specify = $_POST['specify'];
 
         $img = $_FILES['image']['name'];
 
@@ -45,6 +47,7 @@
         $mno = $_POST['mothernum'];
         $sname = $_POST['sibling'];
         $paddress = $_POST['paddress'];
+        $time = time();
 
         if(!$img == '') {
             $target = '../../images/';
@@ -58,10 +61,11 @@
                 $sql = "UPDATE guardian SET guardianname = '$gname', guardiannum = '$gno', fathername = '$fname', fathernum = '$fno', mothername = '$mname', mothernum = '$mno', siblingname = '$sname', paddress = '$paddress' WHERE id = '$pid'";
                 $result = mysqli_query($conn,$sql);
                 
-                $sql = "UPDATE student SET name = '$name', addnum = '$addno', dob = '$dob', nationality = '$nationality', email = '$email', currentaddress = '$address', gender = '$gender', grade = '$grade', doj = '$doj', image = '$file', updatetime = '')= WHERE id = '$id'";
+                $sql = "UPDATE student SET name = '$name', addnum = '$addno', dob = '$dob', nationality = '$nationality', email = '$email', currentaddress = '$address', gender = '$gender', grade = '$grade', doj = '$doj', image = '$file', talent = '$talent', specify = '$specify', updatetime = '$time' WHERE id = '$id'";
                 $result = mysqli_query($conn,$sql);
-    
+                
                 $msg = "Student Record Successfully Updated!";
+                // $msg = $sql;
                 
             } else {
                 $err = "Sorry, there was an error uploading your file. Student Record not Updated!";
@@ -70,7 +74,7 @@
             $sql = "UPDATE guardian SET guardianname = '$gname', guardiannum = '$gno', fathername = '$fname', fathernum = '$fno', mothername = '$mname', mothernum = '$mno', siblingname = '$sname', paddress = '$paddress' WHERE id = '$pid'";
             $result = mysqli_query($conn,$sql);
                 
-            $sql = "UPDATE student SET name = '$name', addnum = '$addno', dob = '$dob', nationality = '$nationality', email = '$email', currentaddress = '$address', gender = '$gender', grade = '$grade', doj = '$doj', updatetime = '' WHERE id = '$id'";
+            $sql = "UPDATE student SET name = '$name', addnum = '$addno', dob = '$dob', nationality = '$nationality', email = '$email', currentaddress = '$address', gender = '$gender', grade = '$grade', doj = '$doj', talent = '$talent', specify = '$specify', updatetime = '$time', updatetime = '' WHERE id = '$id'";
             $result = mysqli_query($conn,$sql);
     
             $msg = "Student Record Successfully Updated!";
@@ -407,9 +411,30 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="position-relative form-group">
-                                        <label for="image" class="">Upload Image</label>
-                                        <input name="image" id="image" type="file" class="form-control" accept="image/*">
+                                    <div class='row'>
+                                        <div class="col-md-6">
+                                            <div class="position-relative form-group">
+                                                <label for="image" class="">Upload Image</label>
+                                                <input name="image" id="image" type="file" class="form-control" accept="image/*">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="position-relative form-group">
+                                                <label for="talent" class="">Talent</label>
+                                                <select name="talent" id="talent" class="form-control" required>
+                                                    <option value="" disabled selected>Select Talent</option>
+                                                    <option value="Academics" <?php if($std['talent'] == 'Academics'){ ?> selected <?php } ?>>Academics</option>
+                                                    <option value="Sports" <?php if($std['talent'] == 'Sports'){ ?> selected <?php } ?>>Sports</option>
+                                                    <option value="Music" <?php if($std['talent'] == 'Music'){ ?> selected <?php } ?>>Musics</option>
+                                                    <option value="Arts" <?php if($std['talent'] == 'Arts'){ ?> selected <?php } ?>>Arts</option>
+                                                    <option value="Other" <?php if($std['talent'] == 'Other'){ ?> selected <?php } ?>>Others (Specify)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col md-3">
+                                            <label for="specify" class="">Specify Here</label>
+                                            <input name="specify" id="specify" value="<?php echo $std['specify'] ?>" type="text" class="form-control"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

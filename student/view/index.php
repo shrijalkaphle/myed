@@ -310,7 +310,8 @@
                                         </table>
                                     </center>
                                     <div class="divider"></div>
-                                    <button style="position:absolute; right:115px; bottom:20px;" data-toggle="modal" data-target="#exampleModalLong" class = "btn btn-primary"><i class="fas fa-poll-h"></i>&nbsp; View Marks</button>
+                                    <button style="position:absolute; right:250px; bottom:20px;" data-toggle="modal" data-target="#healthstatus" class = "btn btn-primary"><i class="fas fa-poll-h"></i>&nbsp; Health Status</button>
+                                    <button style="position:absolute; right:120px; bottom:20px;" data-toggle="modal" data-target="#resultView" class = "btn btn-primary"><i class="fas fa-poll-h"></i>&nbsp; View Marks</button>
                                     <a href="../edit/<?php echo $id ?>"><button style="position:absolute; right:30px; bottom:20px;" class = "btn btn-primary"><i class="fas fa-edit"></i>&nbsp; Edit</button></a>
                                 </div>
                             </div>
@@ -426,11 +427,11 @@
 <script type="text/javascript" src="../../assets/scripts/main.js"></script>
 
 <!--result-->
-<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade" id="resultView" tabindex="-1" role="dialog" aria-labelledby="resultViewTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Result</h5>
+                <h5 class="modal-title" id="resultViewTitle">Result</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -454,7 +455,7 @@
                             <td><?php echo ++$i ?></td>
                             <td><?php echo $data['examid'] . " Terminal"?></td>
                             <td><?php echo $data['percent']?>%</td>
-                            <td><button class="btn btn-primary" onclick="myfun(this.value)" value="<?php echo $data['id'] ?>" data-toggle="modal" data-target="#exampleModal">View Details</button></td>
+                            <td><button class="btn btn-primary" onclick="myfun(this.value)" value="<?php echo $data['id'] ?>" data-toggle="modal" data-target="#marksView">View Details</button></td>
                         </tr>
                 <?php
                     endwhile;
@@ -472,11 +473,11 @@
 <div id="printDiv" style="display: none"></div>
 
 <!--sample detail-->
-<div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="marksView" tabindex="-1" role="dialog" aria-labelledby="marksViewLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Result Preview</h5>
+        <h5 class="modal-title" id="marksViewLabel">Result Preview</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -491,6 +492,25 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- health status of student-->
+<div class="modal fade" id="healthstatus" tabindex="-1" role="dialog" aria-labelledby="healthstatusTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="healthstatusTitle">Health Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>

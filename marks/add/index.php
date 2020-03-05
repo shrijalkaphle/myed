@@ -22,7 +22,8 @@
         // $marks = array();
         $total = 0;
         $fullmarks = 0;
-        // echo $totalSub;
+        $pass = 1;
+
         for($i=0;$i<$totalSub;$i++){
             $subid = $_POST['sub'.$i];
 
@@ -34,6 +35,16 @@
 
             $practical = $_POST['sub'.$i.'_pr'];
             $theory = $_POST['sub'.$i.'_th'];
+
+            if($practical != '') {
+                if($practical< ($row['practical'])*0.32 ){
+                    $pass = 0;
+                }
+            }
+            
+            if($theory< ($row['theory'])*0.32 ){
+                $pass = 0;
+            }
             
             $total = $total + $practical + $theory;
 
@@ -48,7 +59,7 @@
             $msg = "Marks Added to Database";
 
             $percent = round(($total/$fullmarks)*100, 2);
-            $sql2 = "INSERT INTO graph VALUES ('','$addnum','$term','$percent')";
+            $sql2 = "INSERT INTO graph VALUES ('','$addnum','$term','$percent','$pass')";
             $result2 = mysqli_query($conn,$sql2);
         } else {
             $err = "Error while uploading Marks";

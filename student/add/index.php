@@ -26,7 +26,9 @@
         $grade = $_POST['grade'];
         $doj = $_POST['doj'];
         $nationality = $_POST['nationality'];
-        
+        $talent = $_POST['talent'];
+        $specify = $_POST['specify'];
+
         $target = '../../images/';
         $extension = pathinfo( $_FILES['image']['name'], PATHINFO_EXTENSION );
         $newname = 'photoid@' . time() . '.' . $extension;
@@ -49,7 +51,7 @@
             $result = mysqli_query($conn,$sql);
             $pid = $conn->insert_id;
             
-            $sql = "INSERT INTO student VALUE ('','$name','$addno','$dob','$nationality','$email','$address','$gender','$grade','$doj','$file','$pid','')";
+            $sql = "INSERT INTO student VALUE ('','$name','$addno','$dob','$nationality','$email','$address','$gender','$grade','$doj','$file','$talent','$specify','$pid','')";
             $result = mysqli_query($conn,$sql);
 
             $msg = "Student Record Successfully Uploaded!";
@@ -380,9 +382,30 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="position-relative form-group">
-                                        <label for="image" class="">Upload Image</label>
-                                        <input name="image" id="image" type="file" class="form-control" accept="image/*" required>
+                                    <div class='row'>
+                                        <div class="col-md-6">
+                                            <div class="position-relative form-group">
+                                                <label for="image" class="">Upload Image</label>
+                                                <input name="image" id="image" type="file" class="form-control" accept="image/*" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="position-relative form-group">
+                                                <label for="talent" class="">Talent</label>
+                                                <select name="talent" id="talent" class="form-control" required>
+                                                    <option value="" disabled selected>Select Talent</option>
+                                                    <option value="Academics">Academics</option>
+                                                    <option value="Sports">Sports</option>
+                                                    <option value="Music">Musics</option>
+                                                    <option value="Arts">Arts</option>
+                                                    <option value="Other">Others (Specify)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col md-3">
+                                            <label for="specify" class="">Specify Here</label>
+                                            <input name="specify" id="specify" type="text" class="form-control"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
