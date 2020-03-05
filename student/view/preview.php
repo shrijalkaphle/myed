@@ -220,7 +220,7 @@
                         <b>Class teacher's <br> signature</b>
                     </center>
                 </div>
-                <div style="padding-right: 25px;display: inline-block;float: right">
+                <div style="padding-right: 25px;display: inline-block;float:right">
                     <center>
                         _______________________________
                         <br>

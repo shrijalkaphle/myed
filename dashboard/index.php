@@ -9,8 +9,13 @@
     $female = 0;
 
     //pass and failed
-    $pass = 0;
-    $failed = 0;
+    $query = "SELECT * FROM graph GROUP BY addnum HAVING COUNT(*)>=1 AND pass=1";
+    $result1 = mysqli_query($conn,$query);
+    $pass = mysqli_num_rows($result1);
+    
+    $query = "SELECT * FROM graph GROUP BY addnum HAVING COUNT(*)>=1 AND pass=0";
+    $result = mysqli_query($conn,$query);
+    $failed = mysqli_num_rows($result);
 
     //talent graph
     $academic = 0;
@@ -40,7 +45,7 @@
         } else if(strtolower($row['gender']) == 'female') {
             $female++;
         }
-        if(strtolower($row['talent']) == 'academics') {
+        if(strtolower($row['talent']) == 'Academics') {
             $academic++;
         } else if(strtolower($row['talent']) == 'music') {
             $music++;
@@ -475,7 +480,7 @@
             {
                 fill: true,
                 backgroundColor: ['#FF6384','#36A2EB'],
-                data: [ <?php echo $male; ?> , <?php echo $female; ?>],
+                data: [ <?php echo $failed; ?> , <?php echo $pass; ?>],
                 borderColor:	['#FF6384', '#36A2EB'],
                 borderWidth: [2,2]
             }

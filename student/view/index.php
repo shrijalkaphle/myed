@@ -84,7 +84,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 </head>
 <body id="allcontant">
-    <input type="hidden" id="stdid" value="<?php echo $id ?>">
+    <input type="hidden" id="addnum" value="<?php echo $addnum ?>">
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header closed-sidebar">
         <div class="app-header header-shadow">
             <div class="app-header__logo">
@@ -519,6 +519,7 @@
 <script type="text/javascript">
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
+    
 
     function drawChart() {
         var data = new google.visualization.DataTable();
@@ -549,8 +550,18 @@
             pointSize: 5,
             tooltip: { isHtml: true },
         };
-
+        function selectHandler() {
+          var selectedItem = chart.getSelection()[0];
+          if (selectedItem) {
+            var topping = data.getValue(selectedItem.row, 0);
+            var examid = topping.replace(/[a-z A-Z]/g, '');
+            examReport(examid);
+          }
+        }
         var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        google.visualization.events.addListener(chart, 'select', selectHandler);
+        
         chart.draw(data, options);
     }
     
@@ -564,12 +575,23 @@
             }
         })
 
-        // $.ajax({
-        //      url: 'preview.php?id='+id,
-        //     success:function (data) {
-        //         $('#printDiv').html(data);
-        //     }
-        // })
+        $.ajax({
+             url: 'preview.php?id='+id,
+            success:function (data) {
+                $('#printDiv').html(data);
+            }
+        })
+    }
+
+    function examReport(examid) {
+        var addnum = document.getElementById('addnum').value;
+        document.getElementById("myCheck").click();
+        $.ajax({
+             url: 'chart.php?addnum='+addnum+'&examid='+examid,
+            success:function (data) {
+                $('#chartShow').html(data);
+            }
+        })
     }
     
     function printFun() {
@@ -581,6 +603,24 @@
         document.getElementById('allcontant').innerHTML = all;
     }
 </script>
+
+<button id="myCheck" style="display: none" type="button" class="btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#view">Large modal</button>
+
+<!-- <button  data-toggle="modal" data-target="#chartModel" class = "btn btn-primary"></button> -->
+
+<!-- <div class="modal fade bd-example-modal-lg" id="chartModel" tabindex="-1" role="dialog" aria-labelledby="resultViewTitle" aria-hidden="true">
+<div class="modal-dialog gg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+        </div>
+    </div>
+</div> -->
+
 <style>
     @media screen and (max-width: 992px) {
         .chart {
@@ -589,6 +629,9 @@
         }
         .mobView {
             padding-top: 20px;
+        }
+        .modal-dialog {
+            width: 700px !important;
         }
     }
     
@@ -601,3 +644,18 @@
         }
     }
 </style>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="view" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Terminal Preview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div> -->
+            <div class="modal-body"><div id="chartShow"></div></div>
+        </div>
+    </div>
+</div>
