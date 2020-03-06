@@ -7,4 +7,7 @@
     // $db = $_SESSION['database'];
 
     $conn = mysqli_connect($host,$user,$pwd,$db);
+
+    //set time zone
+    date_default_timezone_set('Asia/Kathmandu');
 ?>

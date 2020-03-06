@@ -11,19 +11,31 @@
     $err = '';
 
     //health status update
+    //add new status
+    if(isset($_POST['addHealthStatus'])) {
+        $note = $_POST['sicknote'];
+        $addno = $_POST['addno'];
+        $timestamp = date('Y-m-h H:i:s');
+
+        $query = "INSERT INTO healthstatus VALUE ('','$addno','1','$note','1','$timestamp')";
+        $result = mysqli_query($conn,$query);
+    }
+
     //recovered update
     if(isset($_POST['recovered'])) {
         $hid = $_POST['hid'];
-        // echo "<script>alert(".$hid.")</script>";
-        $query = "UPDATE healthstatus SET isSick = '0'  WHERE id = '$hid'";
+        $timestamp = date('Y-m-h H:i:s');
+        
+        $query = "UPDATE healthstatus SET isSick = '0', updatedate='$timestamp'  WHERE id = '$hid'";
         $result = mysqli_query($conn,$query);
     }
 
     //sick update
     if(isset($_POST['sick'])) {
         $hid = $_POST['hid'];
+        $timestamp = date('Y-m-h H:i:s');
 
-        $query = "UPDATE healthstatus SET isSick = '1' WHERE id = '$hid'";
+        $query = "UPDATE healthstatus SET isSick = '1', updatedate='$timestamp' WHERE id = '$hid'";
         $result = mysqli_query($conn,$query);
     }
 
@@ -514,6 +526,7 @@
                 </button>
             </div>
             <div class="modal-body">
+                <button style="float:right" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addHealthStatus"><i class="fas fa-plus"></i> New</button>
                 <h2>History</h2>
                 <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                     <thead>
@@ -531,7 +544,6 @@
                             $i = 1;
                             while($row = mysqli_fetch_assoc($result)):
                                 $id = $row['id'];
-                                date_default_timezone_set('Asia/Kathmandu');
                                 $today = strtotime(date('Y-m-d H:i:s'));
                                 $updateDate = strtotime($row['updatedate']);
 
@@ -595,6 +607,32 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal to add health status -->
+
+<div class="modal fade" tabindex="-1" role="dialog" id="addHealthStatus" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="healthstatusTitle">Add New Health Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="margin:20px">
+                    <form method="post">
+                        <input type="hidden" name="addno" value="<?php echo $addnum ?>">
+                        <div class="form-group">
+                            <label for="sicknote"><b>Sick Note</b></label>
+                            <textarea name="sicknote" id="sicknote" cols="10" rows="5"  class="form-control" placeholder="Enter Sick Note Here" required></textarea>
+                        </div>
+                        <button type="submit" name="addHealthStatus" class="btn btn-primary">Add</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -718,7 +756,7 @@
 </script>
 
 <?php
-    if(isset($_POST['recovered']) || isset($_POST['sick'])) {
+    if(isset($_POST['recovered']) || isset($_POST['sick']) || isset($_POST['addHealthStatus'])) {
         echo "<script>document.getElementById('healthbtn').click();</script>";
     }
 
