@@ -1,3 +1,5 @@
+
+<script type="text/javascript" src="../../js/jquery-3.4.1.min.js"></script>
 <?php
     include "../../dbconnect.php";
     
@@ -9,6 +11,24 @@
     //variable to display different error messages
     $msg = '';
     $err = '';
+
+    //health status update
+    //recovered update
+    if(isset($_POST['recovered'])) {
+        $hid = $_POST['hid'];
+        // echo "<script>alert(".$hid.")</script>";
+        $query = "UPDATE healthstatus SET isSick = '0'  WHERE id = '$hid'";
+        $result = mysqli_query($conn,$query);
+
+    }
+
+    //sick update
+    if(isset($_POST['sick'])) {
+        $hid = $_POST['hid'];
+
+        $query = "UPDATE healthstatus SET isSick = '1' WHERE id = '$hid'";
+        $result = mysqli_query($conn,$query);
+    }
 
     //update function
     if(isset($_POST['update'])) {
@@ -78,7 +98,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="description" content="This is an example dashboard created using build-in elements and components.">
     <meta name="msapplication-tap-highlight" content="no">
-    <script type="text/javascript" src="../../js/jquery-3.4.1.min.js"></script>
     <link href="../../css/dashboard.css" rel="stylesheet">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
@@ -310,7 +329,7 @@
                                         </table>
                                     </center>
                                     <div class="divider"></div>
-                                    <button style="position:absolute; right:250px; bottom:20px;" data-toggle="modal" data-target="#healthstatus" class = "btn btn-primary"><i class="fas fa-poll-h"></i>&nbsp; Health Status</button>
+                                    <button style="position:absolute; right:250px; bottom:20px;" data-toggle="modal" data-target="#healthstatus" id="healthbtn" class = "btn btn-primary"><i class="fas fa-poll-h"></i>&nbsp; Health Status</button>
                                     <button style="position:absolute; right:120px; bottom:20px;" data-toggle="modal" data-target="#resultView" class = "btn btn-primary"><i class="fas fa-poll-h"></i>&nbsp; View Marks</button>
                                     <a href="../edit/<?php echo $id ?>"><button style="position:absolute; right:30px; bottom:20px;" class = "btn btn-primary"><i class="fas fa-edit"></i>&nbsp; Edit</button></a>
                                 </div>
@@ -505,6 +524,84 @@
                 </button>
             </div>
             <div class="modal-body">
+                <h2>History</h2>
+                <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Sick Note</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $query = "SELECT * FROM healthstatus WHERE addnum = '$addnum'";
+                            $result = mysqli_query($conn,$query);
+                            $i = 1;
+                            while($row = mysqli_fetch_assoc($result)):
+                                $id = $row['id'];
+                                date_default_timezone_set('Asia/Kathmandu');
+                                $today = strtotime(date('Y-m-d H:i:s'));
+                                $updateDate = strtotime($row['updatedate']);
+
+                                $diff = abs($today - $updateDate);
+                                $days = floor(($diff/ (60*60*24))); 
+                                
+                                if($days > 30 && $row['isSick'] == 0) {
+                                    if($row['status'] == 1) {
+                                        $query = "UPDATE healthstatus SET status = '0'";
+                                        mysqli_query($conn,$query);
+                                    }
+                                }
+
+                        ?>
+                        <tr>
+                            <td><?php echo $i ?></td>
+                            <td><?php echo $row['note'] ?></td>
+                            <?php
+                                    if($row['isSick'] == 1) {
+                                ?>
+                                    <td style="background-color:#B81F44; color: white" class="text-center"><b>Sick</b></td>
+                                <?php
+                                    } else if ($row['isSick'] == 0 && $row['status'] == 1) {
+                                ?>
+                                    <td style="background-color:#EC971F; color: white" class="text-center"><b>Recovered</b></td>
+                                <?php
+                                    } else {
+                                ?>
+                                    <td style="background-color:#4CAF50; color: white" class="text-center"><b>Healthy</b></td>
+                                <?php
+                                    }
+                                ?>
+                            <td>
+                                <?php
+                                    if($row['status'] == 1) {
+                                        if($row['isSick'] == 1) {
+                                ?>
+                                    <form method="post">
+                                        <input type="hidden" name="hid" value="<?php echo $row['id'] ?>">
+                                        <button type="submit" name="recovered" class="btn btn-warning">Set as Recovered</button>
+                                    </form>
+                                <?php
+                                        } else {
+                                ?>
+                                    <form method="post">
+                                        <input type="hidden" name="hid" value="<?php echo $row['id'] ?>">
+                                        <button type="submit" name="sick" class="btn btn-danger">Set as Sick</button>
+                                    </form>
+                                <?php
+                                        }
+                                    }
+                                ?>
+                            </td>
+                        </tr>
+                        <?php
+                                $i++;
+                            endwhile;
+                        ?>
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -513,8 +610,46 @@
     </div>
 </div>
 
+
+<!-- btn to show terminal marks graph modal -->
+<button id="myCheck" style="display: none" type="button" class="btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#view">Large modal</button>
+
+
+<!-- view each terminal marks graph -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="view" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body"><div id="chartShow"></div></div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
+
+
+<style>
+    @media screen and (max-width: 992px) {
+        .chart {
+            width: auto !important;
+            height: auto !important;
+        }
+        .mobView {
+            padding-top: 20px;
+        }
+        .modal-dialog {
+            width: 700px !important;
+        }
+    }
+    
+    @media print {
+        @page { 
+            margin: 0;
+        }
+        body {
+            margin: 1.6cm;
+        }
+    }
+</style>
 
 <script type="text/javascript">
     google.charts.load('current', {'packages':['corechart']});
@@ -545,7 +680,7 @@
         var options = {
             title: 'Student Perfermance in Current Year',
             curveType: 'function',
-            legend: { position: 'bottom' },
+            legend: { position: 'none' },
             vAxis: {viewWindowMode: "explicit", viewWindow:{ min: 0, max: 105 }},
             pointSize: 5,
             tooltip: { isHtml: true },
@@ -595,67 +730,10 @@
     }
     
     function printFun() {
-        var all = document.getElementById('allcontant').innerHTML;
         var printin = document.getElementById('printDiv').innerHTML;
         document.getElementById('allcontant').innerHTML = printin;
         fixedTableSize();
         window.print();
-        document.getElementById('allcontant').innerHTML = all;
+        location.reload();
     }
 </script>
-
-<button id="myCheck" style="display: none" type="button" class="btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#view">Large modal</button>
-
-<!-- <button  data-toggle="modal" data-target="#chartModel" class = "btn btn-primary"></button> -->
-
-<!-- <div class="modal fade bd-example-modal-lg" id="chartModel" tabindex="-1" role="dialog" aria-labelledby="resultViewTitle" aria-hidden="true">
-<div class="modal-dialog gg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            
-        </div>
-    </div>
-</div> -->
-
-<style>
-    @media screen and (max-width: 992px) {
-        .chart {
-            width: auto !important;
-            height: auto !important;
-        }
-        .mobView {
-            padding-top: 20px;
-        }
-        .modal-dialog {
-            width: 700px !important;
-        }
-    }
-    
-    @media print {
-        @page { 
-            margin: 0;
-        }
-        body {
-            margin: 1.6cm;
-        }
-    }
-</style>
-
-
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="view" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <!-- <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Terminal Preview</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div> -->
-            <div class="modal-body"><div id="chartShow"></div></div>
-        </div>
-    </div>
-</div>
