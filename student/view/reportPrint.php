@@ -23,15 +23,12 @@
     $std = "SELECT * FROM student WHERE addnum = '$add_num'";
     $stdresult = mysqli_query($conn,$std);
     $stdInfo = mysqli_fetch_assoc($stdresult);
+    $id = $stdInfo['id'];
 
     //extract marks of the exam
     $sql1 = "SELECT * FROM marks WHERE addnum = '$add_num' AND examid = '$examid'";
     $result1 = mysqli_query($conn,$sql1);
     // $marks = mysqli_fetch_assoc($result1);
-
-    function subjectName($val) {
-        return $val;
-    }
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +36,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>MYED | Report Print</title>
+    <link rel="icon" type="image/png" href="../../images/icons/myed.png"/>
 </head>
 <body>
     <div id="content" class="borderSample">
@@ -311,6 +310,11 @@
             document.getElementById('spacer').setAttribute("style","height:"+spacing+"px");
             // alert(document.getElementById('spacer').style.height);
         }
+        window.print();
+
     }
-    // window.onload=fixedTableSize;
+    window.onafterprint = function(){
+        window.location.replace("../view/"+<?php echo $id ?>);
+ }
+    window.onload=fixedTableSize;
 </script>

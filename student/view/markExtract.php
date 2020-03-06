@@ -7,6 +7,7 @@
     $sql0 = "SELECT * FROM graph WHERE id = '$id'";
     $result0 = mysqli_query($conn,$sql0);
     $info = mysqli_fetch_assoc($result0);
+    $id = $info['id'];
     $examid = $info['examid'];
     $add_num = $info['addnum'];
 
@@ -14,6 +15,7 @@
     $sql1 = "SELECT * FROM marks WHERE addnum = '$add_num' AND examid = '$examid'";
     $result1 = mysqli_query($conn,$sql1);
 ?>
+<div class="modal-body">
 <div class="main-card mb-3 card">
     <div class="card-header text-center"><?php echo $examid ?> Terminal Examination Result</div>
     <button style="position:absolute; right:30px; top:10px;" onclick="editDetails()" class = "btn btn-primary"><i class="fas fa-edit"></i>&nbsp; Edit</button>
@@ -70,7 +72,7 @@
                             <td class="text-center">
                                 <?php
                                     $total = $total + $data['practical'] + $data['theory'];
-                                    echo $total;
+                                    echo $data['practical'] + $data['theory'];
                                 ?>
                             </td>
                         </tr>
@@ -99,6 +101,12 @@
         </form>
     </div>
 </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-primary" onclick="printFun(<?php echo $id ?>)">Print</button>
+    <button type="button" class="btn btn-primary" id="cmd">Download as PDF</button>
+</div>
 
 <style>
     input[type="number"] {
@@ -107,10 +115,12 @@
 </style>
 
 <script>
-    // $("#editForm :input").prop("disabled",true);
     function editDetails() {
         document.getElementById('btnShow').style.display = 'block';
         $('input').removeAttr('disabled');
-        // $('#sub2_pr').attr('disabled');
     }
 </script>
+
+
+        
+      

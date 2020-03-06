@@ -1,5 +1,3 @@
-
-<script type="text/javascript" src="../../js/jquery-3.4.1.min.js"></script>
 <?php
     include "../../dbconnect.php";
     
@@ -19,7 +17,6 @@
         // echo "<script>alert(".$hid.")</script>";
         $query = "UPDATE healthstatus SET isSick = '0'  WHERE id = '$hid'";
         $result = mysqli_query($conn,$query);
-
     }
 
     //sick update
@@ -86,6 +83,7 @@
     $parent = mysqli_fetch_assoc($result2);
 ?>
 
+<!-- start of html code -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -99,6 +97,7 @@
     <meta name="description" content="This is an example dashboard created using build-in elements and components.">
     <meta name="msapplication-tap-highlight" content="no">
     <link href="../../css/dashboard.css" rel="stylesheet">
+    <script type="text/javascript" src="../../js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 </head>
@@ -489,8 +488,6 @@
     </div>
 </div>
 
-<div id="printDiv" style="display: none"></div>
-
 <!--sample detail-->
 <div class="modal fade bd-example-modal-lg" id="marksView" tabindex="-1" role="dialog" aria-labelledby="marksViewLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -501,14 +498,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <div id="resultShow"></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="printFun()">Print</button>
-        <button type="button" class="btn btn-primary" id="cmd">Download as PDF</button>
-      </div>
+      <div id="resultShow"></div>
     </div>
   </div>
 </div>
@@ -709,13 +699,6 @@
                 $('#resultShow').html(data);
             }
         })
-
-        $.ajax({
-             url: 'preview.php?id='+id,
-            success:function (data) {
-                $('#printDiv').html(data);
-            }
-        })
     }
 
     function examReport(examid) {
@@ -728,12 +711,15 @@
             }
         })
     }
-    
-    function printFun() {
-        var printin = document.getElementById('printDiv').innerHTML;
-        document.getElementById('allcontant').innerHTML = printin;
-        fixedTableSize();
-        window.print();
-        location.reload();
+
+    function printFun(val) {
+        window.location.replace("reportPrint.php?id="+val);
     }
 </script>
+
+<?php
+    if(isset($_POST['recovered']) || isset($_POST['sick'])) {
+        echo "<script>document.getElementById('healthbtn').click();</script>";
+    }
+
+?>
