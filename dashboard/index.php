@@ -23,15 +23,26 @@
     $arts = 0;
     $music = 0;
     $other = 0;
+    $unhealthy = 0;
+    $recovered = 0;
 
     //health status
-    $query = "SELECT * FROM healthstatus WHERE isSick = 1";
+    $query = "SELECT * FROM healthstatus ORDER BY updatedate DESC";
     $result = mysqli_query($conn,$query);
-    $unhealthy = mysqli_num_rows($result);
-
-    $query = "SELECT * FROM healthstatus WHERE isSick = '0' AND status = '1'";
-    $result = mysqli_query($conn,$query);
-    $recovered = mysqli_num_rows($result);
+    $arr = array();
+    while ($row = mysqli_fetch_assoc($result)){
+        if(!in_array($row['addnum'],$arr)) {
+            if($row['isSick'] == 1) {
+                $unhealthy++;
+                //push addmission number in array $arr id found unhealthy to prevent other check and multiple entry
+                array_push($arr,$row['addnum']);
+            } else if ($row['isSick'] == 0 && $row['status'] == 1) {
+                $recovered++;
+                //push addmission number in array $arr id found recovered to prevent other check and multiple entry
+                array_push($arr,$row['addnum']);
+            }
+        }
+    }
 
     $id = $_SESSION['id'];
     
@@ -45,6 +56,8 @@
         } else if(strtolower($row['gender']) == 'female') {
             $female++;
         }
+
+        //for talent graph
         if(strtolower($row['talent']) == 'Academics') {
             $academic++;
         } else if(strtolower($row['talent']) == 'music') {
@@ -53,7 +66,7 @@
             $sport++;
         }else if (strtolower($row['talent']) == 'arts') {
             $art++;
-        }else {
+        }else if (strtolower($row['talent']) == 'others') {
             $other++;
         }
     }
@@ -75,6 +88,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="description" content="This is an example dashboard created using build-in elements and components.">
     <meta name="msapplication-tap-highlight" content="no">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <script src="../js/jquery-3.4.1.min.js"></script>
     <link href="../css/dashboard.css" rel="stylesheet">
 </head>
@@ -362,60 +376,7 @@
                             
                         </div>
                         <br><br>
-                        <div class="main-card mb-3 card">
-                            <div class="card-header">
-                                Recent Updates
-                            </div>
-                                <div class="table-responsive">
-                                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">#</th>
-                                                <th>Name</th>
-                                                <th class="text-center">Addmission Number</th>
-                                                <th class="text-center">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                            $sql = "SELECT * FROM student ORDER BY updatetime DESC LIMIT 5";
-                                            $result = mysqli_query($conn,$sql);
-                                            $i = 0;
-                                            while($row=mysqli_fetch_assoc($result)):
-                                                $i++;
-                                        ?>
-                                            <tr>
-                                                <td class="text-center text-muted">#<?php echo $i ?></td>
-                                                <td>
-                                                    <div class="widget-content p-0">
-                                                        <div class="widget-content-wrapper">
-                                                            <div class="widget-content-left mr-3">
-                                                                <div class="widget-content-left">
-                                                                    <img width="42" class="rounded-circle" src="../images/<?php echo $row['image'] ?>" alt="">
-                                                                </div>
-                                                            </div>
-                                                            <div class="widget-content-left flex2">
-                                                                <div class="widget-heading"><?php echo $row['name'] ?></div>
-                                                                <div class="widget-subheading opacity-7">Grade: <?php echo $row['grade'] ?></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <?php echo $row['addnum'] ?>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href = "../student/view/<?php echo $row['id'] ?>"><button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm">Details</button></a>
-                                                </td>
-                                            </tr>
-                                        <?php
-                                            endwhile;
-                                        ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                        <div id="info"></div>
                     </div>
                 </div>
             <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
@@ -435,6 +396,17 @@
 </style>
 
 <script>
+    function extract(value) {
+        $.ajax({
+            type: 'POST',
+            url: 'extractDetail.php',
+            data: {'info' : value},
+            success:function (data) {
+                $('#info').html(data);
+            }
+        })
+    }
+
     var canvas1 = document.getElementById("gender");
     var ctx1 = canvas1.getContext('2d');
 
@@ -470,6 +442,7 @@
                     text: 'Gender',
                     position: 'top'
                 },
+            onClick: genderFunction,
             rotation: -0.7 * Math.PI
     };
 
@@ -492,7 +465,8 @@
                     text: 'Pass Fail',
                     position: 'top'
                 },
-            rotation: -0.7 * Math.PI
+            rotation: -0.7 * Math.PI,
+            onClick: gradeFunction,
     };
 
     // chart data for pass failed chart
@@ -515,7 +489,8 @@
                     text: 'Health Status',
                     position: 'top'
                 },
-            rotation: -0.7 * Math.PI
+            rotation: -0.7 * Math.PI,
+            onClick: healthFunction,
     };
 
     // chart data for talent chart
@@ -544,29 +519,69 @@
                     text: 'Talent',
                     position: 'top'
                 },
-            rotation: -0.7 * Math.PI
+            rotation: -0.7 * Math.PI,
+            onClick: talentFunction,
     };
 
 
     // Chart declaration:
-    var myBarChart = new Chart(ctx1, {
+    var gender = new Chart(ctx1, {
         type: 'pie',
         data: data1,
         options: options1
     });
-    var myBarChart = new Chart(ctx2, {
+    var grade = new Chart(ctx2, {
         type: 'pie',
         data: data2,
         options: options2
     });
-    var myBarChart = new Chart(ctx3, {
+    var health = new Chart(ctx3, {
         type: 'pie',
         data: data3,
         options: options3
     });
-    var myBarChart = new Chart(ctx4, {
+    var talent = new Chart(ctx4, {
         type: 'pie',
         data: data4,
         options: options4
     });
+
+    function genderFunction(event, array){
+        var activePoints = gender.getElementAtEvent(event);
+        var firstPoint = activePoints[0];
+        var sex = gender.data.labels[firstPoint._index];
+        extract(sex);
+        // window.location.replace('../dashboard#talent')
+    }
+
+    function healthFunction(event, array){
+        var activePoints = health.getElementAtEvent(event);
+        var firstPoint = activePoints[0];
+        var healthStat = health.data.labels[firstPoint._index];
+        extract(healthStat)
+    }
+
+    function gradeFunction(event, array){
+        var activePoints = grade.getElementAtEvent(event);
+        var firstPoint = activePoints[0];
+        var result = grade.data.labels[firstPoint._index];
+        extract(result)
+    }
+
+    function talentFunction(event, array){
+        var activePoints = talent.getElementAtEvent(event);
+        var firstPoint = activePoints[0];
+        var tnt = talent.data.labels[firstPoint._index];
+        extract(tnt)
+    }
+
+    
+
+    $.ajax({
+        url: 'extractDetail.php',
+        success:function (data) {
+            $('#info').html(data);
+        }
+    })
+
 </script>
