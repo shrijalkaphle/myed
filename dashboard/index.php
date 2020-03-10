@@ -551,7 +551,7 @@
         var firstPoint = activePoints[0];
         var sex = gender.data.labels[firstPoint._index];
         extract(sex);
-        // window.location.replace('../dashboard#talent')
+        scrlltoview();
     }
 
     function healthFunction(event, array){
@@ -559,6 +559,7 @@
         var firstPoint = activePoints[0];
         var healthStat = health.data.labels[firstPoint._index];
         extract(healthStat)
+        scrlltoview()
     }
 
     function gradeFunction(event, array){
@@ -566,6 +567,7 @@
         var firstPoint = activePoints[0];
         var result = grade.data.labels[firstPoint._index];
         extract(result)
+        scrlltoview()
     }
 
     function talentFunction(event, array){
@@ -573,6 +575,7 @@
         var firstPoint = activePoints[0];
         var tnt = talent.data.labels[firstPoint._index];
         extract(tnt)
+        scrlltoview()
     }
 
     
@@ -583,5 +586,17 @@
             $('#info').html(data);
         }
     })
+
+    function scrlltoview() {
+        var element = document.getElementById('info');
+        var headerOffset = 60;
+        var elementPosition = element.getBoundingClientRect().top;
+        var offsetPosition = elementPosition - headerOffset;
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+        });
+    }
 
 </script>
