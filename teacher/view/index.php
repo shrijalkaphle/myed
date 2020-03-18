@@ -1,71 +1,46 @@
 <?php
     include "../../dbconnect.php";
     
+    //check if user is still login or not
     if(!$_SESSION['id']) {
         header('location: ../../home');
     }
-    
-    $id = $_SESSION['id'];
-    $flag = 0;
+
+    //variable to display different error messages
     $msg = '';
     $err = '';
+    
+    $id = $_GET['id'];
+    
+    $uid = $_SESSION['id'];
 
-    $sql = "SELECT * FROM user WHERE id = '$id'";
+    if(isset($_POST['pwdupdate'])){
+        $pwd1 = $_POST['pwd1'];
+        $pwd2 = $_POST['pwd2'];
+
+        if($pwd1 == $pwd2) {
+            $pwd = md5($pwd1);
+            $query = "UPDATE teacher SET password = '$pwd' WHERE id = '$id'";
+            $result = mysqli_query($conn,$query);
+            if($result) {
+                $msg = "Password Successfully Updated! New password is <b><i>". $pwd1 . "</i></b>";
+            } else {
+                $err = "Error while changing password!";
+            }
+        }
+    }
+
+    $sql = "SELECT * FROM user WHERE id = '$uid'";
     $result = mysqli_query($conn,$sql);
 
     $data = mysqli_fetch_assoc($result);
 
-    if(isset($_POST['add'])) {
-        $totalSub = $_POST['totalSubject'];
-        $addnum = $_POST['addnum'];
-        $term = $_POST['term'];
-        // $marks = array();
-        $total = 0;
-        $fullmarks = 0;
-        $pass = 1;
-
-        for($i=0;$i<$totalSub;$i++){
-            $subid = $_POST['sub'.$i];
-
-            //get full marks of each subject
-            $sql1 = "SELECT * FROM course WHERE id = '$subid'";
-            $result1 = mysqli_query($conn,$sql1);
-            $row = mysqli_fetch_assoc($result1);
-            $fullmarks = $fullmarks + $row['fullmark'];
-
-            $practical = $_POST['sub'.$i.'_pr'];
-            $theory = $_POST['sub'.$i.'_th'];
-
-            if($practical != '') {
-                if($practical< ($row['practical'])*0.32 ){
-                    $pass = 0;
-                }
-            }
-            
-            if($theory< ($row['theory'])*0.32 ){
-                $pass = 0;
-            }
-            
-            $total = $total + $practical + $theory;
-
-            $sql1 = "INSERT INTO marks VALUES ('','$addnum','$term','$subid','$practical','$theory','')";
-            $result1 = mysqli_query($conn,$sql1);
-
-            if(!$result) {
-                $flag = 1;
-            }
-        }
-        if($flag == 0) {
-            $msg = "Marks Added to Database";
-
-            $percent = round(($total/$fullmarks)*100, 2);
-            $sql2 = "INSERT INTO graph VALUES ('','$addnum','$term','$percent','$pass')";
-            $result2 = mysqli_query($conn,$sql2);
-        } else {
-            $err = "Error while uploading Marks";
-        }
-    }
+    $sql1 = "SELECT * FROM teacher WHERE id = '$id'";
+    $result1 = mysqli_query($conn,$sql1);
+    $row = mysqli_fetch_assoc($result1);
 ?>
+
+<!-- start of html code -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -73,15 +48,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>MYED | Add Marks</title>
+    <title>MYED | Teacher Detail</title>
     <link rel="icon" type="image/png" href="../../images/icons/myed.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="description" content="This is an example dashboard created using build-in elements and components.">
     <meta name="msapplication-tap-highlight" content="no">
-    <script src="../../js/jquery-3.4.1.min.js"></script>
     <link href="../../css/dashboard.css" rel="stylesheet">
+    <script type="text/javascript" src="../../js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 </head>
-<body>
+<body id="allcontant">
+    <input type="hidden" id="addnum" value="<?php echo $addnum ?>">
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header closed-sidebar">
         <div class="app-header header-shadow">
             <div class="app-header__logo">
@@ -112,14 +90,15 @@
                         </span>
                     </button>
                 </span>
-            </div>    <div class="app-header__content">
+            </div>
+            <div class="app-header__content">
                 <div class="app-header-right">
                     <div class="header-btn-lg pr-0">
                         <div class="widget-content p-0">
                             <div class="widget-content-wrapper">
                             <div class="widget-content-left  ml-3 header-user-info">
                                     <div class="widget-heading">
-                                        <?php echo $data['schoolname']; ?> &nbsp;
+                                        <?php echo $data['schoolname'] ?> &nbsp;
                                     </div>
                                 </div>
                                 <div class="widget-content-left">
@@ -214,7 +193,7 @@
                                     </ul>
                                 </li>
                                 <li style="padding-top: 15px !important;">
-                                    <a href="#" class="mm-active">
+                                    <a href="#">
                                         <i class="metismenu-icon fas fa-file-alt"></i>
                                         Exam
                                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
@@ -229,7 +208,7 @@
                                     </ul>
                                 </li>
                                 <li style="padding-top: 15px !important;">
-                                    <a href="#">
+                                    <a href="#"  class="mm-active">
                                         <i class="metismenu-icon fas fa-chalkboard-teacher"></i>
                                         Teacher
                                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
@@ -276,52 +255,133 @@
                                         CounselAI
                                     </a>
                                 </li>
-                                
                             </ul>
                         </div>
                     </div>
-                </div>   
+                </div>
                 <div class="app-main__outer">
                     <div class="app-main__inner">
-                        <?php
-                            if($err != '') {
-                        ?>
-                        <div class="alert alert-danger fade show" role="alert">
-                            <?php echo $err ?>
-                        </div>
-                        <?php
-                            }
-                        ?>
-                        <?php
-                            if($msg != '') {
-                        ?>
-                        <div class="alert alert-success fade show" role="alert">
-                            <?php echo $msg ?>
-                        </div>
-                        <?php
-                            }
-                        ?>
-                        <div class="main-card mb-3 card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Add Marks</h5>
-                                    <div class="divider"></div>
-                                        <div class="form-row">
-                                            <div class="col-md-8">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="position-relative form-group">
-                                                    <input name="addnum" id="addnum" placeholder="Search with admission number" type="text" class="form-control" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <div class="position-relative form-group">
-                                                    <button onclick="detailExtract()" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                                </div>
-                                            </div>
-                                        </div><hr>
-                                        <div id="examDetails"></div>
+
+                    <?php if($msg != '') { ?>
+                    <div class="alert alert-success" role="alert">
+                        <?php echo $msg ?>
+                    </div>
+                    <?php } ?>
+                    <?php if($err != '') { ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?php echo $err ?>
+                    </div>
+                    <?php } ?>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <center>
+                                    <img width="200" height="200" class="rounded-circle avatar" src="../../images/teacher/<?php echo $row['image'] ?>" alt="">
+                                </center>
+                                <div style="padding-left:20px; font-size:20px">
+                                    <br>
+                                    <center>
+                                        <table>
+                                            <tr>
+                                                <td>Full Name </td>
+                                                <td><div style="width:50px"></div></td>
+                                                <td> &nbsp;<?php echo $row['name'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Addmission Number </td>
+                                                <td><div style="width:10px"></div></td>
+                                                <td> &nbsp;<?php echo $row['addnum'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Addmission Date </td>
+                                                <td><div style="width:10px"></div></td>
+                                                <td> &nbsp;<?php echo $row['doj'] ?></td>
+                                            </tr>
+                                        </table>
+                                    </center>
+                                    <div style="float:right;padding-top:20px">
+                                        <a href="../edit/<?php echo $id ?>"><button class = "btn btn-primary"><i class="fas fa-edit"></i>&nbsp; Edit</button></a>
+                                        <button class = "btn btn-primary" data-toggle="modal" data-target="#changePWD"><i class="fas fa-edit"></i> &nbsp;Change Password</button>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-6">
+                                <div style="font-size: 18px">
+                                    <div class="card-body">
+                                        <div style="height:50px"></div>
+                                        <h3 class="text-center">Personal Information</h3>
+                                        <br>
+                                        <center>
+                                            <table>
+                                                <tr>
+                                                    <td>Full Name</td>
+                                                    <td><div style="width:10px"></div></td>
+                                                    <td> &nbsp;<?php echo $row['name'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Addmission Number </td>
+                                                    <td><div style="width:10px"></div></td>
+                                                    <td> &nbsp;<?php echo $row['addnum'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Username</b> </td>
+                                                    <td><div style="width:10px"></div></td>
+                                                    <td> &nbsp;<b><?php echo $row['uname'] ?></b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Addmission Date </td>
+                                                    <td><div style="width:10px"></div></td>
+                                                    <td> &nbsp;<?php echo $row['doj'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Date of Birth </td>
+                                                    <td><div style="width:10px"></div></td>
+                                                    <td> &nbsp;<?php echo $row['dob'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Gender </td>
+                                                    <td><div style="width:10px"></div></td>
+                                                    <td> &nbsp;<?php echo $row['gender'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Contact Number </td>
+                                                    <td><div style="width:10px"></div></td>
+                                                    <td> &nbsp;<?php echo "(+977)-" . $row['phone'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email </td>
+                                                    <td><div style="width:10px"></div></td>
+                                                    <td> &nbsp;<?php echo $row['email'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Nationality </td>
+                                                    <td><div style="width:10px"></div></td>
+                                                    <td> &nbsp;<?php echo $row['nationality'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Current Address </td>
+                                                    <td><div style="width:10px"></div></td>
+                                                    <td> &nbsp;<?php echo $row['caddress'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Permanent Address </td>
+                                                    <td><div style="width:50px"></div></td>
+                                                    <td> &nbsp;<?php echo $row['paddress'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Qualification </td>
+                                                    <td><div style="width:10px"></div></td>
+                                                    <td> &nbsp;<?php echo $row['qualification'] ?></td>
+                                                </tr>
+                                            </table>
+                                        </center>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        
+                        <div style="padding: 10px"></div>
                     </div>
                 </div>
             <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
@@ -330,38 +390,46 @@
     <script type="text/javascript" src="../../assets/scripts/main.js"></script>
 </body>
 </html>
-<script>
-    function maxCheck(object,maxValue) {
-        var max = maxValue;
-        if(object.value>max) {
-            object.value=max;
-        }
-    };
 
-    function detailExtract() {
-        // var val = $('#addno').val();
-        var val = document.getElementById("addnum").value;
-        
-        // document.getElementById("addnum").value = val;
-        
-        $.ajax({
-            url: 'stdInfo.php',
-            data: 'addno='+val,
-            success:function (data) {
-                $('#examDetails').html(data);
-            }
-        });
-    }
-    
-    
-</script>
+<!-- change password -->
+<div class="modal fade" id="changePWD" tabindex="-1" role="dialog" aria-labelledby="changePWDLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Login Details Update</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                    <div class="position-relative form-group">
+                        <label for="uname" class="">Username</label>
+                        <input name="uname" id="uname" type="text" class="form-control" value="<?php echo $row['uname']?>" disabled>
+                    </div>
+                    <div class="position-relative form-group">
+                        <label for="pwd1" class="">Password</label>
+                        <input name="pwd1" id="pwd1" type="password" placeholder="Password Update" class="form-control" required>
+                    </div>
+                    <div class="position-relative form-group">
+                        <label for="pwd2" class="">Confirm Password</label>
+                        <input name="pwd2" id="pwd2" type="password" placeholder="Password Update" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" name="pwdupdate" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <style>
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
+    table tr td:first-child {
+        text-align: right;
     }
-    input[type="number"] {
-        -moz-appearance: textfield;
+    table tr td {
+        text-align: left;
     }
 </style>

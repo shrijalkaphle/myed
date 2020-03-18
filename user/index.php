@@ -235,7 +235,7 @@
                                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                                     </a>
                                 </li>
-                                <!-- <li style="padding-top: 15px !important;">
+                                <li style="padding-top: 15px !important;">
                                     <a href="#">
                                         <i class="metismenu-icon fas fa-chalkboard-teacher"></i>
                                         Teacher
@@ -243,19 +243,19 @@
                                     </a>
                                     <ul>
                                         <li>
-                                            <a href="components-tabs.html">
+                                            <a href="../teacher/add">
                                                 <i class="metismenu-icon"></i>
                                                 Add Teacher
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="components-accordions.html">
+                                            <a href="../teacher">
                                                 <i class="metismenu-icon"></i>
                                                 View Teacher
                                             </a>
                                         </li>
                                     </ul>
-                                </li> -->
+                                </li>
                                 <li style="padding-top: 15px !important;">
                                     <a href="#">
                                         <i class="metismenu-icon fas fa-book"></i>

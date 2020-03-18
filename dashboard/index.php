@@ -241,10 +241,24 @@
                                 </li>
                                 <li style="padding-top: 15px !important;">
                                     <a href="#">
-                                        <i class="metismenu-icon fas fa-comments"></i>
-                                        CounselAI
+                                        <i class="metismenu-icon fas fa-chalkboard-teacher"></i>
+                                        Teacher
                                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                                     </a>
+                                    <ul>
+                                        <li>
+                                            <a href="../teacher/add">
+                                                <i class="metismenu-icon"></i>
+                                                Add Teacher
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="../teacher">
+                                                <i class="metismenu-icon"></i>
+                                                View Teacher
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
                                 <li style="padding-top: 15px !important;">
                                     <a href="#">
@@ -266,6 +280,12 @@
                                             </a>
                                         </li>
                                     </ul>
+                                </li>
+                                <li style="padding-top: 15px !important;">
+                                    <a href="#">
+                                        <i class="metismenu-icon fas fa-comments"></i>
+                                        CounselAI
+                                    </a>
                                 </li>
                             </ul>
                         </div>

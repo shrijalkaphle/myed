@@ -14,7 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>MYED | Student List</title>
+    <title>MYED | Teacher List</title>
     <link rel="icon" type="image/png" href="../images/icons/myed.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="description" content="This is an example dashboard created using build-in elements and components.">
@@ -135,7 +135,7 @@
                                     </a>
                                 </li>
                                 <li style="padding-top: 15px !important;">
-                                    <a href="#"  class="mm-active">
+                                    <a href="#">
                                     <i class="metismenu-icon fas fa-user-graduate"></i>
                                         Students
                                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
@@ -171,7 +171,7 @@
                                     </ul>
                                 </li>
                                 <li style="padding-top: 15px !important;">
-                                    <a href="#">
+                                    <a href="#" class="mm-active">
                                         <i class="metismenu-icon fas fa-chalkboard-teacher"></i>
                                         Teacher
                                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
@@ -184,7 +184,7 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="../teacher">
+                                            <a href="../techer">
                                                 <i class="metismenu-icon"></i>
                                                 View Teacher
                                             </a>
@@ -224,100 +224,67 @@
                                     <div class="page-title-icon">
                                         <i class="pe-7s-menu icon-gradient bg-mean-fruit"></i>
                                     </div>
-                                    <div>Student List </div>
+                                    <div>Teacher List </div>
                                 </div>    
                             </div>
                         </div>
-                        <div class="row">
-                            
-                            <div class="col-md-3">
-                                View Student According to Class
-                            </div>
-                            <div class="col-md-2">
-                                <select onchange="classFilter()" id="classSelect" class="form-control">
-                                    <option value="0" selected>View All</option>
-                                    <option value="one">Class One</option>
-                                    <option value="two">Class Two</option>
-                                    <option value="three">Class Three</option>
-                                    <option value="four">Class Four</option>
-                                    <option value="five">Class Five</option>
-                                    <option value="six">Class Six</option>
-                                    <option value="seven">Class Seven</option>
-                                    <option value="eight">Class Eight</option>
-                                    <option value="nine">Class Nine</option>
-                                    <option value="ten">Class Ten</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3"></div>
-                            <div class="col-md-4">
-                            <input type="search" oninput="addnumSearch()" class="form-control" name="search" id="search" placeholder="Search using Addmission Number" />
-                            </div>
-                        </div>
-                        <br>
-                        <div id="allResult">
-                            <div class="main-card mb-3 card">
-                                <div class="card-header">All Student List</div>
-                                <div class="table-responsive">
-                                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                                        <thead>
+                        <div class="main-card mb-3 card">
+                            <div class="card-header">All Teacher List</div>
+                            <div class="table-responsive">
+                                <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Addmission Number</th>
+                                            <th class="text-center">Addmission Date</th>
+                                            <th class="text-center">Address</th>
+                                            <th class="text-center">Contact</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                            $sql = "SELECT * FROM teacher";
+                                            $result = mysqli_query($conn, $sql);
+                                            while ($row = mysqli_fetch_assoc($result)) :
+                                        ?>
                                             <tr>
-                                                <th class="text-center">Name</th>
-                                                <th class="text-center">Addmission Number</th>
-                                                <th class="text-center">Addmission Date</th>
-                                                <th class="text-center">Address</th>
-                                                <th class="text-center">Contact</th>
-                                                <th class="text-center">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                                $sql = "SELECT * FROM student";
-                                                $result = mysqli_query($conn, $sql);
-                                                while ($row = mysqli_fetch_assoc($result)) :
-                                                    $pid = $row['pid'];
-                                                    $sql2 = "SELECT * FROM guardian WHERE id ='$pid'";
-                                                    $result2 = mysqli_query($conn, $sql2);
-                                                    $details = mysqli_fetch_assoc($result2);
-                                            ?>
-                                                <tr>
-                                                    <td>
-                                                        <div class="widget-content p-0">
-                                                            <div class="widget-content-wrapper">
-                                                                <div class="widget-content-left mr-3">
-                                                                    <div class="widget-content-left">
-                                                                        <img width="42" class="rounded-circle" src="../images/<?php echo $row['image'] ?>" alt="">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="widget-content-left flex2">
-                                                                    <div class="widget-heading"><?php echo $row['name'] ?></div>
-                                                                    <div class="widget-subheading opacity-7">Grade : <?php echo $row['grade'] ?></div>
+                                                <td>
+                                                    <div class="widget-content p-0">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left mr-3">
+                                                                <div class="widget-content-left">
+                                                                    <img width="42" class="rounded-circle" src="../images/teacher/<?php echo $row['image'] ?>" alt="">
                                                                 </div>
                                                             </div>
+                                                            <div class="widget-content-left flex2">
+                                                                <div class="widget-heading"><?php echo $row['name'] ?></div>
+                                                            </div>
                                                         </div>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <div><?php echo $row['addnum'] ?></div>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <div><?php echo $row['doj'] ?></div>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <div><?php echo $row['currentaddress'] ?></div>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <div><?php echo $details['guardiannum'] ?></div>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="view/<?php echo $row['id']; ?>"><button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm">Details</button></a>
-                                                        <a href="delete/<?php echo $row['id']; ?>" onclick="return confirm('Are you sure?');"><button type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm">Delete</button></a>
-                                                    </td>
-                                                </tr>
-                                            <?php
-                                            endwhile;
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div><?php echo $row['addnum'] ?></div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div><?php echo $row['doj'] ?></div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div><?php echo $row['caddress'] ?></div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div><?php echo $row['phone'] ?></div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="view/<?php echo $row['id']; ?>"><button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm">Details</button></a>
+                                                    <a href="delete/<?php echo $row['id']; ?>" onclick="return confirm('Are you sure?');"><button type="button" id="PopoverCustomT-1" class="btn btn-danger btn-sm">Delete</button></a>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        endwhile;
+                                        ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

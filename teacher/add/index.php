@@ -20,44 +20,34 @@
         $name = $_POST['name'];
         $dob = $_POST['dob'];
         $addno = $_POST['addno'];
-        $address = $_POST['address'];
+        $caddress = $_POST['caddress'];
+        $paddress = $_POST['paddress'];
         $gender = $_POST['gender'];
+        $phone = $_POST['phone'];
         $email = $_POST['email'];
-        $grade = $_POST['grade'];
         $doj = $_POST['doj'];
         $nationality = $_POST['nationality'];
-        $talent = $_POST['talent'];
-        $specify = $_POST['specify'];
+        $qualification = $_POST['qualification'];
 
-        $target = '../../images/';
+        $array = explode(" ",$name);
+        $username = $array[0].".".$array[count($array)-1];
+
+        $target = '../../images/teacher/';
         $extension = pathinfo( $_FILES['image']['name'], PATHINFO_EXTENSION );
         $newname = 'photoid@' . time() . '.' . $extension;
         $file = 'profile_photos/' . $newname;
         $target_file = $target . $file;
         $temp = $_FILES['image']['tmp_name'];
-
-        $gname = $_POST['guardianname'];
-        $gno = $_POST['guardiannum'];
-        $fname = $_POST['fathername'];
-        $fno = $_POST['fathernum'];
-        $mname = $_POST['mothername'];
-        $mno = $_POST['mothernum'];
-        $sname = $_POST['sibling'];
-        $paddress = $_POST['paddress'];
         $time = time();
 
         if (move_uploaded_file($temp, $target_file)) {
-            $sql = "INSERT INTO guardian VALUE ('','$gname','$gno','$fname','$fno','$mname','$mno','$sname','$paddress')";
-            $result = mysqli_query($conn,$sql);
-            $pid = $conn->insert_id;
-            
-            $sql = "INSERT INTO student VALUE ('','$name','$addno','$dob','$nationality','$email','$address','$gender','$grade','$doj','$file','$talent','$specify','$pid','')";
+            $sql = "INSERT INTO teacher VALUE ('','$name','$addno','$username','','$dob','$caddress','$paddress','$gender','$phone','$email','$doj','$nationality','$qualification','$file')";
             $result = mysqli_query($conn,$sql);
 
-            $msg = "Student Record Successfully Uploaded!";
+            $msg = "Teacher Record Successfully Uploaded!";
             
         } else {
-            $err = "Sorry, there was an error uploading your file. Student Record not Uploaded";
+            $err = "Sorry, there was an error uploading your file. Teacher Record not Uploaded";
         }
     }
 ?>
@@ -69,7 +59,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>MYED | Add Student</title>
+    <title>MYED | Add Teacher</title>
     <link rel="icon" type="image/png" href="../../images/icons/myed.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="description" content="This is an example dashboard created using build-in elements and components.">
@@ -189,7 +179,7 @@
                                     </a>
                                 </li>
                                 <li style="padding-top: 15px !important;">
-                                    <a href="#"  class="mm-active">
+                                    <a href="#">
                                     <i class="metismenu-icon fas fa-user-graduate"></i>
                                         Students
                                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
@@ -225,7 +215,7 @@
                                     </ul>
                                 </li>
                                 <li style="padding-top: 15px !important;">
-                                    <a href="#">
+                                    <a href="#" class="mm-active">
                                         <i class="metismenu-icon fas fa-chalkboard-teacher"></i>
                                         Teacher
                                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
@@ -284,7 +274,7 @@
                                     <div class="page-title-icon">
                                         <i class="pe-7s-add-user icon-gradient bg-mean-fruit"></i>
                                     </div>
-                                    <div>Add Student</div>
+                                    <div>Add Teacher</div>
                                 </div>
                             </div>
                         </div>
@@ -309,13 +299,13 @@
                         <form method="post" enctype="multipart/form-data">
                             <div class="main-card mb-3 card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Student Details</h5>
+                                    <h5 class="card-title">Teacher Details</h5>
                                     <div class="divider"></div>
                                     <div class="form-row">
                                         <div class="col-md-4">
                                             <div class="position-relative form-group">
                                                 <label for="name" class="">Full Name</label>
-                                                <input name="name" id="name" placeholder="Full Name of Student" type="text" class="form-control" required>
+                                                <input name="name" id="name" placeholder="Full Name of Teacher" type="text" class="form-control" required>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -334,16 +324,24 @@
                                     <div class="form-row">
                                         <div class="col-md-4">
                                             <div class="position-relative form-group">
-                                                <label for="address" class="">Address</label>
-                                                <input name="address" id="address" placeholder="Current Address of Student" type="text" class="form-control" required>
+                                                <label for="caddress" class="">Current Address</label>
+                                                <input name="caddress" id="caddress" placeholder="Current Address of Teacher" type="text" class="form-control" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="position-relative form-group">
                                                 <label for="country" class="">Country</label>
                                                 <input name="country" id="country" value="Nepal" type="text" class="form-control" disabled>
                                             </div>
                                         </div>
+                                        <div class="col-md-5">
+                                            <div class="position-relative form-group">
+                                                <label for="paddress" class="">Permanent Address</label>
+                                                <input name="paddress" id="paddress" placeholder="Permanent Address of Teacher" type="text" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
                                         <div class="col-md-4">
                                             <div class="position-relative form-group">
                                                 <label for="gender" class="">Gender</label>
@@ -354,20 +352,20 @@
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
+                                            <div class="position-relative form-group">
+                                                <label for="phone" class="">Contact No.</label>
+                                                <input name="phone" id="phone" type="number" placeholder="Contact Number" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
                                             <div class="position-relative form-group">
                                                 <label for="email" class="">Email<span> (Optional)</span></label>
                                                 <input name="email" id="email" type="email" placeholder="Email Address" class="form-control">
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="position-relative form-group">
-                                                <label for="grade" class="">Grade</label>
-                                                <input name="grade" id="grade" type="text" placeholder="Grade" class="form-control" required>
-                                            </div>
-                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="position-relative form-group">
                                                 <label for="doj" class="">Date of Joining</label>
@@ -380,6 +378,10 @@
                                                 <input name="nationality" id="nationality" placeholder="Nationality" type="text" class="form-control" required>
                                             </div>
                                         </div>
+                                        <div class="col md-6">
+                                            <label for="qualification" class="">Qualification</label>
+                                            <input name="qualification" id="qualification" type="text" class="form-control"/>
+                                        </div>
                                     </div>
                                     <div class='row'>
                                         <div class="col-md-6">
@@ -388,89 +390,9 @@
                                                 <input name="image" id="image" type="file" class="form-control" accept="image/*" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="position-relative form-group">
-                                                <label for="talent" class="">Talent</label>
-                                                <select name="talent" id="talent" class="form-control" required>
-                                                    <option value="" disabled selected>Select Talent</option>
-                                                    <option value="Academics">Academics</option>
-                                                    <option value="Sports">Sports</option>
-                                                    <option value="Music">Musics</option>
-                                                    <option value="Arts">Arts</option>
-                                                    <option value="Other">Others (Specify)</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col md-3">
-                                            <label for="specify" class="">Specify Here</label>
-                                            <input name="specify" id="specify" type="text" class="form-control"/>
-                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="main-card mb-3 card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Guardians & Parents Details</h5>
-                                    <div class="divider"></div>
-                                        <div class="form-row">
-                                            <div class="col-md-6">
-                                                <div class="position-relative form-group">
-                                                    <label for="guardianname" class="">Guardians Name</label>
-                                                    <input name="guardianname" id="guardianname" type="text" placeholder="Guardians Name" class="form-control" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="position-relative form-group">
-                                                    <label for="guardiannum" class="">Guardians Number</label>
-                                                    <input name="guardiannum" id="guardiannum" type="number" placeholder="+977-xxxxxxxxxx" class="form-control" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="col-md-6">
-                                                <div class="position-relative form-group">
-                                                    <label for="fathername" class="">Father Name</label>
-                                                    <input name="fathername" id="fathername" type="text" placeholder="Father Name" class="form-control" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="position-relative form-group">
-                                                    <label for="fathernum" class="">Father Number</label>
-                                                    <input name="fathernum" id="fathernum" type="number" placeholder="+977-xxxxxxxxxx" class="form-control" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="col-md-6">
-                                                <div class="position-relative form-group">
-                                                    <label for="mothername" class="">Mother Name</label>
-                                                    <input name="mothername" id="mothername" type="text" placeholder="Mother Name" class="form-control" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="position-relative form-group">
-                                                    <label for="mothernum" class="">Mother Number</label>
-                                                    <input name="mothernum" id="mothernum" type="number" placeholder="+977-xxxxxxxxxx" class="form-control" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="col-md-6">
-                                                <div class="position-relative form-group">
-                                                    <label for="sibling" class="">Sibling Name (Optional)</label>
-                                                    <input name="sibling" id="sibling" type="text" placeholder="Sibling Name" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="position-relative form-group">
-                                                    <label for="paddress" class="">Permanent Address</label>
-                                                    <input name="paddress" id="paddress" type="text" placeholder="Permanent Address" class="form-control" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <center><input type="submit" value="Add Student" name="add" class="mt-2 btn btn-primary"></center>
-                                    </div>
+                                    <br>
+                                    <center><input type="submit" value="Add Teacher" name="add" class="mt-2 btn btn-primary"></center>
                                 </div>
                             </div>
                         </form>

@@ -53,7 +53,7 @@
             $target = '../../images/';
             $extension = pathinfo( $_FILES['image']['name'], PATHINFO_EXTENSION );
             $newname = 'photoid@' . time() . '.' . $extension;
-            $file = 'profileImages/' . $newname;
+            $file = 'profile_photos/' . $newname;
             $target_file = $target . $file;
             $temp = $_FILES['image']['tmp_name'];
 
@@ -253,14 +253,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li style="padding-top: 15px !important;">
-                                    <a href="#">
-                                        <i class="metismenu-icon fas fa-comments"></i>
-                                        CounselAI
-                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                    </a>
-                                </li>
-                                <!-- <li style="padding-bottom: 15px !important;">
+                                <li style="padding-bottom: 15px !important;">
                                     <a href="#">
                                         <i class="metismenu-icon fas fa-chalkboard-teacher"></i>
                                         Teacher
@@ -268,19 +261,19 @@
                                     </a>
                                     <ul>
                                         <li>
-                                            <a href="components-tabs.html">
+                                            <a href="../../teacher/add">
                                                 <i class="metismenu-icon"></i>
                                                 Add Teacher
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="components-accordions.html">
+                                            <a href="../../teacher">
                                                 <i class="metismenu-icon"></i>
                                                 View Teacher
                                             </a>
                                         </li>
                                     </ul>
-                                </li> -->
+                                </li>
                                 <li style="padding-top: 15px !important;">
                                     <a href="#">
                                         <i class="metismenu-icon fas fa-book"></i>
@@ -289,18 +282,24 @@
                                     </a>
                                     <ul>
                                         <li>
-                                            <a href="../course/add">
+                                            <a href="../../course/add">
                                                 <i class="metismenu-icon"></i>
                                                 Add Courses
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="../course">
+                                            <a href="../../course">
                                                 <i class="metismenu-icon"></i>
                                                 View Courses
                                             </a>
                                         </li>
                                     </ul>
+                                </li>
+                                <li style="padding-top: 15px !important;">
+                                    <a href="#">
+                                        <i class="metismenu-icon fas fa-comments"></i>
+                                        CounselAI
+                                    </a>
                                 </li>
                             </ul>
                         </div>
